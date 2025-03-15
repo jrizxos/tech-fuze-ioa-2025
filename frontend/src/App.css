@@ -34,7 +34,7 @@
 .map-point{
   position: absolute;
   z-index: 21;
-  opacity: 85%;
+  opacity: 100%;
   width: 5%;
 }
 
