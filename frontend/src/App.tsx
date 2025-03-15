@@ -1,33 +1,57 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import aqlogo from "./assets/logo.png"
+import map from "./assets/ioannina.png"
+import hex from "./assets/hex1.png"
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+export interface MapPoint {
+  x: number; 
+  y: number; 
+  data: number;
+}
 
+const xoff = 24.7;
+const yoff = 36.7;
+
+export const points: MapPoint[] = [
+  {x: 100,
+   y: 100,
+   data: 1
+  },
+  {x: 100+xoff,
+   y: 100+yoff,
+   data: 1
+  },
+  {x: 100+xoff*2,
+   y: 100+yoff*2,
+   data: 1
+  },
+  {x: 100+xoff*3,
+  y: 100+yoff*3,
+  data: 1
+   },
+];
+
+function App() {
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+        <div>
+          <img src={aqlogo} className="logo" />
+        </div>
+        
+        <div className="map-container">
+          {
+            points.map((point, index) => 
+              {
+                return (
+                  <img src={hex} className="map-point" 
+                  key={index}
+                  style={{top: point.y, left: point.x}}/>
+                )
+              }
+            )
+          }
+          <img src={map} className="map"/>
+        </div>
     </>
   )
 }
