@@ -66,7 +66,12 @@ export const points: MapPoint[] = [
 
 function App() {
   return (
-    <>
+    <>  
+      <head>
+      <title>Aqioannina</title>
+      <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+      </head>
+        
         <div>
           <img src={aqlogo} className="logo" />
         </div>
