@@ -33,3 +33,14 @@ For the creation of the app we used Java Spring and React for the backend/fronte
 The database holds all the sensors' readings and the sensors of each hexagon. Since the app doesn't use user data, there isn't an account requiremnt. 
 The sensor network may expand in the future, we ho
 Users can zoom in and out on the map for better readability and are able to set their own range of air quality, for personilized results.
+
+## Credits
+Frontend: John Rizos
+
+Backend: Zisis Psalidas
+
+Graphics: Iliana Rapti
+
+<!-- Research: Sokratis -->
+
+<!-- Bussiness plan: George  -->
