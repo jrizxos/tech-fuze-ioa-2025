@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-TechApplication<tech>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.tech.tech.TechApplication",
+            "projectName": "tech",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

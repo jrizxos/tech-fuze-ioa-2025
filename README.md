@@ -1,5 +1,7 @@
 # Prototype app for TechFuse 2025 Hackathon
 
+This is the state of the ripository as it was at the end of the event
+
 ## Background
 
 As part of iGEM Ioannina 2025, we took part in TechFuse 2025 Hackathon. Our task was to develop a solution to a current or future challenge facing our city, Ioannina.
