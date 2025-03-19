@@ -1,22 +1,17 @@
 package com.tech.tech.models;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
+
 
 @Entity
+@IdClass(ConnectionId.class)
 public class Connection {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer sensorId;
+    @Id
     private Integer hexagonId;
 
-    public Integer getHexagonId() {
-        return hexagonId;
-    }
 
-    public Integer getSensorId() {
-        return sensorId;
-    }
 }
