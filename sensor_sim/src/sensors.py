@@ -12,12 +12,12 @@ def main():
     times = 0
     while not conn and times < 10:
         try:
-            response = requests.get("http://mysql-container:3306")
+            #response = requests.get("http://mysql-container:3306")
             conn = mysql.connector.connect(
                 user="tester",
                 password="password",
                 host="localhost",
-                port=3306,
+                port=3305,
                 database="data"
 
             )
@@ -41,7 +41,7 @@ def main():
         except Exception as e:
             threads.append(None)
             print(f"Thread {i} could not start, error: {e}")
-        sleep(0.1)
+        sleep(0.05)
     
     try:
         th.Thread(target=interupt).start()
