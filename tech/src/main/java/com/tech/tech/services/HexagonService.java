@@ -1,6 +1,8 @@
 package com.tech.tech.services;
 
 import jakarta.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 
@@ -10,6 +12,7 @@ import com.tech.tech.repositories.HexRepository;
 @Service
 @Transactional
 public class HexagonService {
+    @Autowired
     private HexRepository hexRepository;
 
     public HexagonService(HexRepository hexRepository) {
