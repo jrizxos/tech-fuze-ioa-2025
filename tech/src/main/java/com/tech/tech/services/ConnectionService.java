@@ -25,7 +25,7 @@ public class ConnectionService {
     }
 
     public Connection get(Integer id) {
-        final Optional<Connection> conn = connectionRepository.FindAllByHexagonId(id);
+        final Optional<Connection> conn = connectionRepository.findAllByHexagonId(id);
         return conn.orElse(null);
     }
 }

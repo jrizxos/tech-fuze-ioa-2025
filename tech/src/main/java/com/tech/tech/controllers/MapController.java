@@ -1,29 +1,59 @@
 package com.tech.tech.controllers;
 
-import com.tech.tech.repositories.ConnectionRepository;
-import com.tech.tech.repositories.HexRepository;
-import com.tech.tech.repositories.SensorRepository;
+import com.tech.tech.models.Connection;
+import com.tech.tech.models.Hexagon;
+import com.tech.tech.models.Sensor;
+import com.tech.tech.services.ConnectionService;
+import com.tech.tech.services.HexagonService;
+import com.tech.tech.services.SensorService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/public")
+@CrossOrigin(origins = "http://localhost:3000")
 public class MapController {
 
     @Autowired
-    private HexRepository hexRepository;
+    private HexagonService hexagonService;
 
     @Autowired
-    private SensorRepository sensorRepository;
+    private SensorService sensorService;
 
     @Autowired
-    private ConnectionRepository connectionRepository;
+    private ConnectionService connectionService;
 
-    @GetMapping("hello")
-    public String sayHello() {
-        return "Hello, Spring Boot!";
+    @GetMapping("connections")
+    public String connections() {
+        Iterable<Connection> conns = connectionService.listAll();
+        String text = "";
+        for (Connection conn : conns){
+            text = text.concat(String.format("Connection: Hexagon: %s ----- Sensor: %s<br>", conn.getHexagonId(), conn.getSensorId()));
+        }
+        return text;
+    }
+
+    @GetMapping("hexagons")
+    public String hexagons() {
+        Iterable<Hexagon> hexagons = hexagonService.listAll();
+        String text = "";
+        for (Hexagon hexagon : hexagons){
+            text = text.concat(String.format("Hexagon %s: latitude: %s ----- longtitude: %s<br>", hexagon.getId(), hexagon.getLatitude(), hexagon.getLongtitude()));
+        }
+        return text;
+    }
+
+    @GetMapping("sensors")
+    public String sensors() {
+        Iterable<Sensor> sensors = sensorService.listAll();
+        String text = "";
+        for (Sensor sensor : sensors){
+            text = text.concat(String.format("Sensor %s: reading: %s ----- date: %s<br>", sensor.getId(), sensor.getConcentration(), sensor.getLastReading()));
+        }
+        return text;
     }
 }

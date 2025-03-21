@@ -15,6 +15,10 @@ public class Hexagon {
 
     private Float longtitude;
 
+    public Integer getId() {
+        return id;
+    }
+
     public Float getLatitude() {
         return latitude;
     }

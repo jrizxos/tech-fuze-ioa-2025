@@ -7,15 +7,15 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 import com.tech.tech.models.Hexagon;
-import com.tech.tech.repositories.HexRepository;
+import com.tech.tech.repositories.HexagonRepository;
 
 @Service
 @Transactional
 public class HexagonService {
     @Autowired
-    private HexRepository hexRepository;
+    private HexagonRepository hexRepository;
 
-    public HexagonService(HexRepository hexRepository) {
+    public HexagonService(HexagonRepository hexRepository) {
         this.hexRepository = hexRepository;
     }
 

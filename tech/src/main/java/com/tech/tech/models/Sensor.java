@@ -17,6 +17,10 @@ public class Sensor {
 
     private LocalDateTime lastReading;
 
+    public Integer getId() {
+        return id;
+    }
+
     public Float getConcentration() {
         return concentration;
     }

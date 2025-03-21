@@ -20,6 +20,10 @@ public class SensorService {
         this.sensorRepository = sensorRepository;
     }
 
+    public Iterable<Sensor> listAll() {
+        return sensorRepository.findAll();
+    }
+
     public Sensor get(Integer id){
         final Optional<Sensor> sensor = sensorRepository.findById(id);
         return sensor.orElse(null);
