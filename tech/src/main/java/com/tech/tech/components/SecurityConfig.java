@@ -17,10 +17,10 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/admin/**").hasRole("ADMIN") // Only ADMIN can access
                 .requestMatchers("/user/**").hasRole("USER")  // Only USER can access
-                .requestMatchers("/api/public/**").permitAll()   // Public access
+                .requestMatchers("/api/**").permitAll()   // Public access
                 .anyRequest().authenticated() // Any other request requires authentication
             )
-            .formLogin(form -> form.defaultSuccessUrl("/api/public", true)) // Redirect after login
+            .formLogin(form -> form.defaultSuccessUrl("/api", true)) // Redirect after login
             .logout(logout -> logout.logoutUrl("/logout"))
             .csrf(csrf -> csrf.disable());
 

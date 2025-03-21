@@ -1,5 +1,6 @@
 package com.tech.tech.controllers;
 
+import com.tech.tech.dto.HexagonDTO;
 import com.tech.tech.models.Connection;
 import com.tech.tech.models.Hexagon;
 import com.tech.tech.models.Sensor;
@@ -10,11 +11,13 @@ import com.tech.tech.services.SensorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @RestController
-@RequestMapping("/api/public")
+@RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:3000")
 public class MapController {
 
@@ -56,4 +59,24 @@ public class MapController {
         }
         return text;
     }
+
+    @GetMapping("hexagon/{id}")
+    public String hexagonData(@PathVariable Integer id) {
+
+        Hexagon hexagon = hexagonService.get(id);
+        Iterable<Connection> conns = connectionService.get(id);
+        float sum = 0;
+        String text = String.format("Hexagon with id %s connects to sensors ", id);
+        for (Connection conn : conns) {
+            Integer sensorId = conn.getSensorId();
+            Sensor sensor = sensorService.get(sensorId);
+            sum += sensor.getConcentration();
+            text = text.concat(String.format("%s ", sensorId));
+        }
+        float averageConcentration = sum / 6;
+        //HexagonDTO hexData = new HexagonDTO(hexagon.getId(), hexagon.getLatitude(), hexagon.getLongtitude(), averageConcentration);
+        text = text.concat(String.format(" and has a concentration of %s μg/m<sup>3</sup>", averageConcentration));
+        return text;
+    }
+    
 }

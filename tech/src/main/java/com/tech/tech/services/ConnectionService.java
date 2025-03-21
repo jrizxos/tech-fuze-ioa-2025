@@ -1,7 +1,5 @@
 package com.tech.tech.services;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +22,7 @@ public class ConnectionService {
         return connectionRepository.findAll();
     }
 
-    public Connection get(Integer id) {
-        final Optional<Connection> conn = connectionRepository.findAllByHexagonId(id);
-        return conn.orElse(null);
+    public Iterable<Connection> get(Integer id) {
+        return (Iterable<Connection>) connectionRepository.findAllByHexagonId(id);
     }
 }
