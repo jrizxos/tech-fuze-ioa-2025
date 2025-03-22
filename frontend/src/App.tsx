@@ -60,13 +60,14 @@ function App() {
   const scalePoint = (
     x: number,
     y: number,
-    magic: number,
+    magic_x: number,
+    magic_y: number,
     renderedDimensions: { width: number; height: number },
     img_width: number,
     img_height: number
   ) => {
-    const x_new = (x + magic) * (renderedDimensions.width / img_width);
-    const y_new = (y + magic) * (renderedDimensions.height / img_height);
+    const x_new = (x + magic_x) * (renderedDimensions.width / img_width);
+    const y_new = (y + magic_y) * (renderedDimensions.height / img_height);
     return { x: x_new, y: y_new };
   };
 
@@ -75,18 +76,19 @@ function App() {
     renderedDimensions: { width: number; height: number },
     img_width: number,
     img_height: number,
-    magic: number
+    magic_x: number,
+    magic_y: number,
   ): MapPoint[] => {
     return Object.entries(json)
       .map(([key, [x, y]]) => {
-        const { x: scaledX, y: scaledY } = scalePoint(x, y, magic, renderedDimensions, img_width, img_height);
+        const { x: scaledX, y: scaledY } = scalePoint(x, y, magic_x, magic_y, renderedDimensions, img_width, img_height);
         return { x: scaledX, y: scaledY, data: Infinity, id: key };
       });
   };
 
   /* Load hexagons and fetch data */
   useEffect(() => {
-    const initialPoints = parseJsonToMapPoints(jsonData, renderedDimensions, img_width, img_height, 6.5);
+    const initialPoints = parseJsonToMapPoints(jsonData, renderedDimensions, img_width, img_height, 6.5, 5.9);
     setMapPoints(initialPoints);
 
     initialPoints.forEach((point) => {
