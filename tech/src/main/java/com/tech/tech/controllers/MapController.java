@@ -9,11 +9,14 @@ import com.tech.tech.services.HexagonService;
 import com.tech.tech.services.SensorService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -30,6 +33,10 @@ public class MapController {
     @Autowired
     private ConnectionService connectionService;
 
+    public String getMethodName(@RequestParam String param) {
+        return new String();
+    }
+    
     @GetMapping("connections")
     public String connections() {
         Iterable<Connection> conns = connectionService.listAll();
@@ -61,22 +68,22 @@ public class MapController {
     }
 
     @GetMapping("hexagon/{id}")
-    public String hexagonData(@PathVariable Integer id) {
+    public ResponseEntity<HexagonDTO> hexagonData(@PathVariable Integer id) {
 
         Hexagon hexagon = hexagonService.get(id);
         Iterable<Connection> conns = connectionService.get(id);
         float sum = 0;
-        String text = String.format("Hexagon with id %s connects to sensors ", id);
+        //String text = String.format("Hexagon with id %s connects to sensors ", id);
         for (Connection conn : conns) {
             Integer sensorId = conn.getSensorId();
             Sensor sensor = sensorService.get(sensorId);
             sum += sensor.getConcentration();
-            text = text.concat(String.format("%s ", sensorId));
+            //text = text.concat(String.format("%s ", sensorId));
         }
         float averageConcentration = sum / 6;
-        //HexagonDTO hexData = new HexagonDTO(hexagon.getId(), hexagon.getLatitude(), hexagon.getLongtitude(), averageConcentration);
-        text = text.concat(String.format(" and has a concentration of %s μg/m<sup>3</sup>", averageConcentration));
-        return text;
+        HexagonDTO hexData = new HexagonDTO(hexagon.getId(), hexagon.getLatitude(), hexagon.getLongtitude(), averageConcentration);
+        //text = text.concat(String.format(" and has a concentration of %s μg/m<sup>3</sup>", averageConcentration));
+        return ResponseEntity.ok(hexData);
     }
     
 }
