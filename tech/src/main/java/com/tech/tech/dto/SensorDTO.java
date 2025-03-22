@@ -1,16 +1,14 @@
 package com.tech.tech.dto;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class SensorDTO {
     private int id;
     private float concentration;
     private LocalDateTime lastReading;
 
-    public SensorDTO(int id, LocalDateTime lastReading) {
+    public SensorDTO(int id, float concentration, LocalDateTime lastReading) {
         this.id = id;
-        
         this.concentration = concentration;
         this.lastReading = lastReading;
     }
