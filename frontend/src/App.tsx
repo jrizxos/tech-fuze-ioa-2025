@@ -5,7 +5,7 @@ import hex_o from "./assets/hexo.png";
 import hex_y from "./assets/hexy.png";
 import hex_g from "./assets/hexg.png";
 import "./App.css";
-import jsonData from "./layer_positions.json";
+import jsonData from "../../misc/layer_positions.json";
 import { useRef, useState, useEffect } from "react";
 import axios from "axios";
 

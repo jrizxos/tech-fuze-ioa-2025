@@ -14,7 +14,7 @@ function processLayers(layers) {
                 layer.remove(); // Delete duplicate layer
             } else {
                 seenPositions[posKey] = true;
-                output += "\"hex_" + i + "\":[" + posKey + "],\n";
+                output += "\"" + (i+1) + "\":[" + posKey + "],\n";
             }
         }
         else if (layer.typename === "LayerSet") {

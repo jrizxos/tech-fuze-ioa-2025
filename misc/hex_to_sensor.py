@@ -53,7 +53,7 @@ if __name__=='__main__':
 
         sensors_dict = {}
         seen_sensors = {}
-        sensor_index = 0
+        sensor_index = 1
 
         for hexagon in new_hexagons:
             hex_sensors = [tuple(x) for x in new_hexagons[hexagon]['sensors']]
