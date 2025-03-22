@@ -78,7 +78,6 @@ function App() {
     magic: number
   ): MapPoint[] => {
     return Object.entries(json)
-      .filter(([, arr]): arr is [number, number] => arr.length === 2)
       .map(([key, [x, y]]) => {
         const { x: scaledX, y: scaledY } = scalePoint(x, y, magic, renderedDimensions, img_width, img_height);
         return { x: scaledX, y: scaledY, data: Infinity, id: key };
