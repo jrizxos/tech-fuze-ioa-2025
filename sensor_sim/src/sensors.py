@@ -5,7 +5,9 @@ import random as ra
 from datetime import datetime
 import requests
 
-mutex = th.Lock()
+ranges = {50: [0, 50], 75: [51, 100], 90: [101, 200], 100: [201, 300]}
+
+# mutex = th.Lock()
 stopEvent = th.Event()
 def main():
     conn = None
@@ -30,31 +32,36 @@ def main():
         print("Unable to connect to database")
         exit(1)
     
+    thread = th.Thread(target=interupt)
+    thread.start()
+
+    loop(conn)
     
-    threads=[]
-    for i in range(1, 25):
-        try:
-            print(f"Starting thread {i}...")
-            thread = th.Thread(target=loop, args=(conn, i))
-            threads.append(thread)
-            thread.start()
-        except Exception as e:
-            threads.append(None)
-            print(f"Thread {i} could not start, error: {e}")
-        sleep(0.05)
+    # threads=[]
+    # for i in range(1, 25):
+    #     try:
+    #         print(f"Starting thread {i}...")
+    #         thread = th.Thread(target=loop, args=(conn, i))
+    #         threads.append(thread)
+    #         thread.start()
+    #     except Exception as e:
+    #         threads.append(None)
+    #         print(f"Thread {i} could not start, error: {e}")
+    #     sleep(0.05)
     
-    try:
-        th.Thread(target=interupt).start()
-    except Exception as e:
-        print("Interupt thread failed, stopping proccess")
-        stopEvent.set()
+    # try:
+    #     th.Thread(target=interupt).start()
+    # except Exception as e:
+    #     print("Interupt thread failed, stopping proccess")
+    #     stopEvent.set()
 
     
-    for thread in threads:
-        if type(thread)==th.Thread:
-            thread.join()
+    # for thread in threads:
+    #     if type(thread)==th.Thread:
+    #         thread.join()
     
-    print("All threads stopped succesfully")
+    # print("All threads stopped succesfully")
+    conn.close()
     exit(0)
 
 
@@ -67,23 +74,38 @@ def interupt():
 
 
 
-def loop(conn: mysql.connector.CMySQLConnection, id) -> None:
-    cur = conn.cursor()
-    while not stopEvent.is_set():
-        delay = ra.randint(10, 20)
-        sleep(delay)
-        with mutex:
+def loop(conn: mysql.connector.CMySQLConnection) -> None:
+    with conn.cursor() as cur:
+        cur.execute("select count(*) from sensor")
+        sensors = cur.fetchone()[0]
+        while not stopEvent.is_set():
+            delay = 0.05
+            sleep(delay)
+            # with mutex:
+            id = ra.randint(1, sensors)
+            rang = ra.randint(0, 100)
+            if rang <= 50:
+                concentation = ra.randint(0, 50)
+            elif rang <= 75:
+                concentation = ra.randint(51, 100)
+            elif rang <= 85:
+                concentation = ra.randint(101, 150)
+            elif rang <= 90:
+                concentation = ra.randint(151, 200)
+            else:
+                concentation = ra.randint(200, 300)
+            sql = f"update sensor set concentration=%s, last_reading=%s where id=%s"
+            vals = (concentation, datetime.now(), id)
             try:
-                value = ra.randint(50, 500)
-                sql = f"update sensor set concentration=%s, last_reading=%s where id=%s"
-                values = (value, datetime.now(), id)
-                cur.execute(sql, values)
+                cur.execute(sql, vals)
                 conn.commit()
-                print(f"Thread {id} updated table sensor")
+                # print(f"Thread {id} updated table sensor")
             except Exception as e:
-                print(f"Thread {id} could not update db, error: {e}")
-    
-    print(f"Thread {id} stopped")
+                print(f"Could not update sensor with id {id}")
+                # print(f"Thread {id} could not update db, error: {e}")
+            # print(f"Updated sensor {id} with value {concentation}")
+        
+        # print(f"Thread {id} stopped")
         
 
 

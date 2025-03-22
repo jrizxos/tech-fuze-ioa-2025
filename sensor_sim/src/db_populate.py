@@ -4,51 +4,7 @@ import threading as th
 import random as ra
 from datetime import datetime
 import requests
-
-vals=[
-    (1, 1,),
-    (1, 2,),
-    (1, 3,),
-    (1, 4,),
-    (1, 7,),
-    (1, 8,),
-    (2, 4,),
-    (2, 6,),
-    (2, 8,),
-    (2, 10,),
-    (2, 13,),
-    (2, 14,),
-    (3, 13,),
-    (3, 14,),
-    (3, 18,),
-    (3, 16,),
-    (3, 22,),
-    (3, 20,),
-    (4, 17,),
-    (4, 18,),
-    (4, 21,),
-    (4, 22,),
-    (4, 23,),
-    (4, 24,),
-    (5, 11,),
-    (5, 12,),
-    (5, 15,),
-    (5, 17,),
-    (5, 19,),
-    (5, 21,),
-    (6, 5,),
-    (6, 3,),
-    (6, 9,),
-    (6, 7,),
-    (6, 6,),
-    (6, 12,),
-    (7, 7,),
-    (7, 8,),
-    (7, 12,),
-    (7, 13,),
-    (7, 17,),
-    (7, 18,)
-    ]
+import json
 
 def main():
     conn = None
@@ -73,43 +29,69 @@ def main():
         print("Unable to connect to database")
         exit(1)
     
+    with conn.cursor() as cur:
+        try:
+            cur.execute("delete from sensor")
+            conn.commit()
+            cur.execute("delete from hexagon")
+            conn.commit()
+            cur.execute("delete from connection")
+            conn.commit()
+        except Exception as e:
+            print(e)
+            exit(1)
+
     populate_sensor(conn)
     populate_hexagon(conn)
-    populate_connection(conn)
     
-    print("All threads stopped succesfully")
+    print("All tables populated")
     exit(0)
 
 
 def populate_sensor(conn: mysql.connector.CMySQLConnection):
+    try:
+        with open("./misc/sensors.json", "r") as file:
+            data = json.load(file)
+    except json.JSONDecodeError as e:
+        print("Could not read sensor.json")
+
     with conn.cursor() as cur:
         try:
-            for i in range(1, 25):
+            for id in data.keys():
                 sql = f"insert into sensor (id, concentration, last_reading) values(%s, %s, %s)"
-                val = (i, ra.randint(50, 500), datetime.now())
+                val = (int(id), ra.randint(50, 500), datetime.now())
                 cur.execute(sql, val)
                 conn.commit()
         except Exception as e:
             print(f"Could not populate table sensor, {e}")
 
 def populate_hexagon(conn):
+    try:
+        with open("./misc/hexagons.json", "r") as file:
+            data = json.load(file)
+    except json.JSONDecodeError as e:
+        print("Could not read sensor.json")
+
     with conn.cursor() as cur:
         try:
-            for i in range(1, 8):
+            for id in data.keys():
                 sql = f"insert into hexagon (id, latitude, longtitude) values(%s, %s, %s)"
-                val = (i, 0, 0)
+                val = (int(id), int(data[id]["x"]), int(data[id]["y"]))
                 cur.execute(sql, val)
                 conn.commit()
+
+                populate_connection(conn, id, data[id]["sensors"])
         except Exception as e:
             print(f"Could not populate table hexagon {e}")
 
-def populate_connection(conn):
+def populate_connection(conn, hex_id, sens_ids):
     with conn.cursor() as cur:
         try:
-            for i in range(42):
-                sql = f"insert into connection (hexagon_id, sensor_id) values(%s, %s)"
-                cur.execute(sql, vals[i])
-                conn.commit()
+            for sens_id in sens_ids:
+                        sql = f"insert into connection (hexagon_id, sensor_id) values(%s, %s)"
+                        val = (int(hex_id), int(sens_id))
+                        cur.execute(sql, val)
+                        conn.commit()
         except Exception as e:
             print(f"Could not populate table connection {e}")
 

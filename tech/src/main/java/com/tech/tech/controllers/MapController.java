@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:5173")
 public class MapController {
 
     @Autowired
@@ -68,7 +68,7 @@ public class MapController {
     }
 
     @GetMapping("hexagon/{id}")
-    public ResponseEntity<HexagonDTO> hexagonData(@PathVariable Integer id) {
+    public ResponseEntity<Float> hexagonData(@PathVariable Integer id) {
 
         Hexagon hexagon = hexagonService.get(id);
         Iterable<Connection> conns = connectionService.get(id);
@@ -80,10 +80,10 @@ public class MapController {
             sum += sensor.getConcentration();
             //text = text.concat(String.format("%s ", sensorId));
         }
-        float averageConcentration = sum / 6;
+        Float averageConcentration = sum / 6;
         HexagonDTO hexData = new HexagonDTO(hexagon.getId(), hexagon.getLatitude(), hexagon.getLongtitude(), averageConcentration);
         //text = text.concat(String.format(" and has a concentration of %s μg/m<sup>3</sup>", averageConcentration));
-        return ResponseEntity.ok(hexData);
+        return ResponseEntity.ok(averageConcentration);
     }
     
 }
