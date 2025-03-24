@@ -1,0 +1,30 @@
+services:
+  db:
+    container_name: mydb
+    image: mysql:latest
+    ports: 
+      - "3305:3306"
+    environment: 
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: data
+      MYSQL_USER: tester
+      MYSQL_PASSWORD: password
+    networks:
+      - sim
+    volumes:
+      - sensor_data:/var/lib/mysql
+  
+  sensor_sim:
+    container_name: sensors
+    image: sensor-sim
+    networks:
+      - sim
+  
+networks:
+  sim: {}
+
+volumes:
+  sensor_data:
+    driver: flocker
+    driver_opts:
+      size: "1GiB"
