@@ -15,13 +15,13 @@ def main():
             conn = mysql.connector.connect(
                 user="tester",
                 password="password",
-                host="localhost",
-                port=3305,
+                host="db",
+                port=3306,
                 database="data"
 
             )
         except mysql.connector.Error as e:
-            print(f"Error connecting to MySQL Platform: {e}")
+            print(f"db_reset: Error connecting to MySQL Platform: {e}")
             sleep(5)
             times += 1
         
@@ -50,7 +50,7 @@ def main():
 
 def populate_sensor(conn: mysql.connector.CMySQLConnection):
     try:
-        with open("./misc/sensors.json", "r") as file:
+        with open("sensors.json", "r") as file:
             data = json.load(file)
     except json.JSONDecodeError as e:
         print("Could not read sensor.json")
@@ -78,7 +78,7 @@ def populate_sensor(conn: mysql.connector.CMySQLConnection):
 
 def populate_hexagon(conn):
     try:
-        with open("./misc/hexagons.json", "r") as file:
+        with open("hexagons.json", "r") as file:
             data = json.load(file)
     except json.JSONDecodeError as e:
         print("Could not read sensor.json")

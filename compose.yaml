@@ -11,20 +11,59 @@ services:
       MYSQL_PASSWORD: password
     networks:
       - sim
+      - back
     volumes:
       - sensor_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      retries: 5
+      timeout: 5s
+
+  front:
+    container_name: react-frontend
+    image: front
+    ports:
+      - "3000:3000"
+    networks:
+      - front
+    command: bash -c "serve -s dist"
+
+  backend:
+    container_name: spring-backend
+    image: backend
+    environment:
+      DB_NAME: data
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: tester
+      DB_PASS: password
+    ports:
+      - "8080:8080"
+    networks:
+      - back
+      - front
+    depends_on:
+      db:
+        condition: service_healthy
+    command: bash -c "java -jar backend.jar"
+
   
   sensor_sim:
     container_name: sensors
-    image: sensor-sim
+    image: sensor_sim
     networks:
       - sim
+    depends_on:
+      db:
+        condition: service_healthy
+    command: bash -c "python ./db_reset.py && python ./sensors.py"
   
 networks:
   sim: {}
+  back: {}
+  front: {}
 
 volumes:
   sensor_data:
-    driver: flocker
-    driver_opts:
-      size: "1GiB"
+    name: sensor_data

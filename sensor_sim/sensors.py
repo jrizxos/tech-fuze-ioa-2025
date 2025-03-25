@@ -18,13 +18,13 @@ def main():
             conn = mysql.connector.connect(
                 user="tester",
                 password="password",
-                host="localhost",
-                port=3305,
+                host="db",
+                port=3306,
                 database="data"
 
             )
         except mysql.connector.Error as e:
-            print(f"Error connecting to MySQL Platform: {e}")
+            print(f"sensors: Error connecting to MySQL Platform: {e}")
             sleep(5)
             times += 1
         

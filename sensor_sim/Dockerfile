@@ -6,7 +6,7 @@ COPY requirements.txt .
 
 RUN pip install -r requirements.txt
 
-COPY db_reset.py .
-COPY sensors.py .
-COPY hexagons.json .
-COPY sensors.json .
+COPY ./sensor_sim/db_reset.py .
+COPY ./sensor_sim/sensors.py .
+COPY ./sensor_sim/data/hexagons.json .
+COPY ./sensor_sim/data/sensors.json .
