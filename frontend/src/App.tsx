@@ -103,13 +103,17 @@ function App() {
     });
   }, [renderedDimensions]); // Re-run when image resizes
 
+  /* set page title and favicon */
+  useEffect(() => {
+    document.title = "AqIoannina";
+    const link = document.querySelector("link[rel~='icon']") as HTMLLinkElement;
+    if (link) {
+      link.href = "/favicon.ico";
+    }
+  }, []);
+
   return (
     <>
-      <head>
-        <title>Aqioannina</title>
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-      </head>
-
       <div>
         <img src={aq_logo} className="logo" />
       </div>
