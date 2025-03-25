@@ -41,6 +41,13 @@ Backend: Zisis Psalidas
 
 Graphics: Iliana Rapti
 
+<hr>
+
+## Usage
+
+In order to run all the components of the application, you need to install Java 21, MySQL, Node.js, and Python 11.
+Otherwise, you can also use Docker and run the `dockerization` script.
+
 <!-- Research: Sokratis -->
 
 <!-- Bussiness plan: George  -->
